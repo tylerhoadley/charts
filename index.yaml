@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   common:
   - apiVersion: v2
-    created: "2023-12-09T13:21:46.3120552-05:00"
+    created: "2023-12-09T13:46:44.8516923-05:00"
     description: Functional library for common use charts
     digest: 7b0a3ff811cb5a44c4bb89bc2feabbd6109882d922948bede583793d270d12fe
     keywords:
@@ -13,4 +13,26 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/common-1.0.0.tgz
     version: 1.0.0
-generated: "2023-12-09T13:21:46.3098197-05:00"
+  universal:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-12-09T13:46:44.85414-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.computersthatwork.ca/
+      version: 1.0.0
+    description: a basic universal chart from my common library
+    digest: c1bc8aecdc565a9d3283c4aefee95e38bc6d30f8148290f35c8af0887f10f857
+    keywords:
+    - common
+    - universal
+    maintainers:
+    - email: tyle.rhoadley@computersthatwork.ca
+      name: tylerhoadley
+    name: universal
+    sources:
+    - https://github.com/tylerhoadley/charts
+    urls:
+    - https://charts.computersthatwork.ca/universal-1.0.0.tgz
+    version: 1.0.0
+generated: "2023-12-09T13:46:44.8491862-05:00"

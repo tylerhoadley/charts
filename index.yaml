@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   common:
   - apiVersion: v2
-    created: "2023-12-11T10:14:21.5419268-05:00"
+    created: "2023-12-11T18:06:40.0803825-05:00"
     description: Functional library for common use charts
     digest: f6c65b0ba49456032ed8b3731c99cf9e0787ec727f5bf7b2e26997059cb4abdc
     keywords:
@@ -14,7 +14,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v2
-    created: "2023-12-10T01:42:26.5964449-05:00"
+    created: "2023-12-11T18:06:40.0764256-05:00"
     description: Functional library for common use charts
     digest: 586501f9932d8d3201c85555a94f9e86d26b0edb9061b76707425f81b6d1c7b3
     keywords:
@@ -26,7 +26,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2023-12-10T01:42:26.5942142-05:00"
+    created: "2023-12-11T18:06:40.0741307-05:00"
     description: Functional library for common use charts
     digest: 7b1eade47800a4a58e2394d6d9d19b4d21ee50606176be5178613b0caeff2c94
     keywords:
@@ -37,10 +37,41 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/common-1.0.0.tgz
     version: 1.0.0
+  raw:
+  - annotations:
+      artifacthub.io/changes: |
+        - "[Changed]: Bump Dependency library to 3.0.0-rc.3"
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-12-11T18:06:40.0814942-05:00"
+    dependencies:
+    - name: library
+      repository: https://buttahtoast.github.io/helm-charts/
+      version: 3.0.0-rc.3
+    description: Render raw kubernetes manifests managed by a helm release
+    digest: 83996d0a1a43c34fb0bf1472d241c92d7148ade2a392e76414c430ddf350d520
+    home: https://github.com/bedag/helm-charts/tree/master/charts/raw
+    icon: https://www.bedag.ch/wGlobal/wGlobal/layout/images/logo.svg
+    keywords:
+    - raw
+    - templates
+    - resources
+    maintainers:
+    - email: sre@bedag.ch
+      name: SRE
+    name: raw
+    sources:
+    - https://github.com/bedag/helm-charts/tree/master/charts/raw
+    type: application
+    urls:
+    - https://charts.computersthatwork.ca/raw-2.0.0.tgz
+    version: 2.0.0
   universal:
   - apiVersion: v2
     appVersion: 1.0.2
-    created: "2023-12-11T10:21:32.8447352-05:00"
+    created: "2023-12-11T18:06:40.0917482-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -61,7 +92,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2023-12-10T01:42:26.6048702-05:00"
+    created: "2023-12-11T18:06:40.0870035-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -82,7 +113,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-12-10T01:42:26.5994503-05:00"
+    created: "2023-12-11T18:06:40.0841798-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -101,4 +132,4 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/universal-1.0.0.tgz
     version: 1.0.0
-generated: "2023-12-10T01:42:26.5918332-05:00"
+generated: "2023-12-11T18:06:40.0717215-05:00"

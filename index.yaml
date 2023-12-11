@@ -39,6 +39,27 @@ entries:
     version: 1.0.0
   universal:
   - apiVersion: v2
+    appVersion: 1.0.2
+    created: "2023-12-11T10:21:32.8447352-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.computersthatwork.ca/
+      version: 1.0.2
+    description: a basic universal chart from my common library
+    digest: 95f600ccd4faef9887ac81983e345bf6523df81e907bef192769bfd87c682bec
+    keywords:
+    - common
+    - universal
+    maintainers:
+    - email: tyler.hoadley@computersthatwork.ca
+      name: tylerhoadley
+    name: universal
+    sources:
+    - https://github.com/tylerhoadley/charts
+    urls:
+    - https://charts.computersthatwork.ca/universal-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     appVersion: 1.0.1
     created: "2023-12-10T01:42:26.6048702-05:00"
     dependencies:

@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   common:
   - apiVersion: v2
-    created: "2023-12-13T10:16:30.9980123-05:00"
+    created: "2023-12-13T10:28:11.8623808-05:00"
     description: Functional library for common use charts
     digest: 6990ab8c358d0250e68f7c9e6a253864c8e444c84db4b3cd0e6113b410dcbd71
     keywords:
@@ -14,7 +14,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.4.tgz
     version: 1.0.4
   - apiVersion: v2
-    created: "2023-12-13T10:16:30.9951462-05:00"
+    created: "2023-12-13T10:28:11.8601298-05:00"
     description: Functional library for common use charts
     digest: a11e0268782abdef9e66f55e942f5f8b1fe1ef3222cb666c9c9f4278a4150532
     keywords:
@@ -26,7 +26,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.3.tgz
     version: 1.0.3
   - apiVersion: v2
-    created: "2023-12-13T10:16:30.9901493-05:00"
+    created: "2023-12-13T10:28:11.8561475-05:00"
     description: Functional library for common use charts
     digest: f6c65b0ba49456032ed8b3731c99cf9e0787ec727f5bf7b2e26997059cb4abdc
     keywords:
@@ -38,7 +38,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v2
-    created: "2023-12-13T10:16:30.9867888-05:00"
+    created: "2023-12-13T10:28:11.8533753-05:00"
     description: Functional library for common use charts
     digest: 586501f9932d8d3201c85555a94f9e86d26b0edb9061b76707425f81b6d1c7b3
     keywords:
@@ -50,7 +50,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2023-12-13T10:16:30.9840552-05:00"
+    created: "2023-12-13T10:28:11.8506275-05:00"
     description: Functional library for common use charts
     digest: 7b1eade47800a4a58e2394d6d9d19b4d21ee50606176be5178613b0caeff2c94
     keywords:
@@ -69,7 +69,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-12-13T10:16:30.9995581-05:00"
+    created: "2023-12-13T10:28:11.8633862-05:00"
     dependencies:
     - name: library
       repository: https://buttahtoast.github.io/helm-charts/
@@ -94,8 +94,29 @@ entries:
     version: 2.0.0
   universal:
   - apiVersion: v2
+    appVersion: 1.0.4
+    created: "2023-12-13T10:28:11.8788608-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.computersthatwork.ca/
+      version: 1.0.4
+    description: a basic universal chart from my common library
+    digest: 59c326017032c75d74ed521492629a7486ab92cc0c18575a5c89ea2c0ff91e82
+    keywords:
+    - common
+    - universal
+    maintainers:
+    - email: tyler.hoadley@computersthatwork.ca
+      name: tylerhoadley
+    name: universal
+    sources:
+    - https://github.com/tylerhoadley/charts
+    urls:
+    - https://charts.computersthatwork.ca/universal-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
     appVersion: 1.0.3
-    created: "2023-12-13T10:16:31.0133153-05:00"
+    created: "2023-12-13T10:28:11.8765564-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -116,7 +137,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.0.2
-    created: "2023-12-13T10:16:31.0109897-05:00"
+    created: "2023-12-13T10:28:11.8740762-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -137,7 +158,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2023-12-13T10:16:31.0043463-05:00"
+    created: "2023-12-13T10:28:11.8699345-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -158,7 +179,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-12-13T10:16:31.0019875-05:00"
+    created: "2023-12-13T10:28:11.8663944-05:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -177,4 +198,4 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/universal-1.0.0.tgz
     version: 1.0.0
-generated: "2023-12-13T10:16:30.9782497-05:00"
+generated: "2023-12-13T10:28:11.8480954-05:00"

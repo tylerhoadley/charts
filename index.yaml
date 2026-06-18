@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   common:
   - apiVersion: v2
-    created: "2026-06-18T16:16:40.633616561-04:00"
+    created: "2026-06-18T16:34:22.139762501-04:00"
     description: Functional library for common use charts
     digest: 5b3a3587846c6b568a9da7e55ab5f6dbb9ed75476a68a460b93455217a072025
     keywords:
@@ -14,7 +14,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.4.tgz
     version: 1.0.4
   - apiVersion: v2
-    created: "2026-06-18T16:16:40.63061673-04:00"
+    created: "2026-06-18T16:34:22.136413673-04:00"
     description: Functional library for common use charts
     digest: a11e0268782abdef9e66f55e942f5f8b1fe1ef3222cb666c9c9f4278a4150532
     keywords:
@@ -26,7 +26,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.3.tgz
     version: 1.0.3
   - apiVersion: v2
-    created: "2026-06-18T16:16:40.62767838-04:00"
+    created: "2026-06-18T16:34:22.133135135-04:00"
     description: Functional library for common use charts
     digest: f6c65b0ba49456032ed8b3731c99cf9e0787ec727f5bf7b2e26997059cb4abdc
     keywords:
@@ -38,7 +38,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v2
-    created: "2026-06-18T16:16:40.624748186-04:00"
+    created: "2026-06-18T16:34:22.129593377-04:00"
     description: Functional library for common use charts
     digest: 586501f9932d8d3201c85555a94f9e86d26b0edb9061b76707425f81b6d1c7b3
     keywords:
@@ -50,7 +50,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2026-06-18T16:16:40.621190384-04:00"
+    created: "2026-06-18T16:34:22.126632678-04:00"
     description: Functional library for common use charts
     digest: 7b1eade47800a4a58e2394d6d9d19b4d21ee50606176be5178613b0caeff2c94
     keywords:
@@ -61,25 +61,32 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/common-1.0.0.tgz
     version: 1.0.0
-  kargo-project-configs:
+  kargo-apps:
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-06-18T16:16:40.635921522-04:00"
+    created: "2026-06-18T16:34:22.141439149-04:00"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
-    digest: b00fb44906b80627336aee373f06cf82f46cd09a7ad328734560d110e6ad9679
+    digest: 1f7d40d3ed25b7091fd8d4f77be3b02c5afc0c0e107971c366accac008324a01
     keywords:
     - kargo
     - gitops
+    - analysistemplate
+    - clusteranalysistemplate
+    - clusterconfig
+    - clusterpromotiontask
+    - projectconfig
     - project
-    - projectconfigs
+    - promotiontask
+    - stage
+    - warehouse
     maintainers:
     - email: tyler.hoadley@computersthatwork.ca
       name: tyler hoadley
-    name: kargo-project-configs
+    name: kargo-apps
     type: application
     urls:
-    - https://charts.computersthatwork.ca/kargo-project-configs-0.0.1.tgz
+    - https://charts.computersthatwork.ca/kargo-apps-0.0.1.tgz
     version: 0.0.1
   raw:
   - annotations:
@@ -89,7 +96,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-18T16:16:40.637787463-04:00"
+    created: "2026-06-18T16:34:22.143050175-04:00"
     dependencies:
     - name: library
       repository: https://buttahtoast.github.io/helm-charts/
@@ -115,7 +122,7 @@ entries:
   universal:
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-06-18T16:16:40.658918283-04:00"
+    created: "2026-06-18T16:34:22.165648247-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -136,7 +143,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.0.3
-    created: "2026-06-18T16:16:40.655733313-04:00"
+    created: "2026-06-18T16:34:22.161797041-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -157,7 +164,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.0.2
-    created: "2026-06-18T16:16:40.651709437-04:00"
+    created: "2026-06-18T16:34:22.155422774-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -178,7 +185,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2026-06-18T16:16:40.64418367-04:00"
+    created: "2026-06-18T16:34:22.151714407-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -199,7 +206,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-18T16:16:40.641000849-04:00"
+    created: "2026-06-18T16:34:22.147718141-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -218,4 +225,4 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/universal-1.0.0.tgz
     version: 1.0.0
-generated: "2026-06-18T16:16:40.618017814-04:00"
+generated: "2026-06-18T16:34:22.123167269-04:00"

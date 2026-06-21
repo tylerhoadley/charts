@@ -24,6 +24,6 @@ spec:
         {{- include "common.annotations" . | nindent 8 }}
         sealedsecrets.bitnami.com/cluster-wide: "true"
       creationTimestamp: null
-      name: {{ include "common.names.fullname" . }}-sealed-secrets
+      name: {{ include "common.names.fullname" . }}
 
 {{- end }}

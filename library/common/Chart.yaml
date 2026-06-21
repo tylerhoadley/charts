@@ -1,9 +1,9 @@
 apiVersion: v2
-appVersion: 1.0.2
+appVersion: 1.0.3
 dependencies:
 - name: common
   repository: https://charts.computersthatwork.ca/
-  version: 1.0.2
+  version: 1.0.3
 description: a basic universal chart from my common library
 keywords:
 - common
@@ -15,4 +15,4 @@ sources:
 kubeVersion: '>=1.16.0-0'
 name: common
 type: library
-version: 1.0.2
+version: 1.0.3

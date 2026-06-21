@@ -1,8 +1,18 @@
 apiVersion: v2
-description: Functional library for common use charts
+appVersion: 1.0.1
+dependencies:
+- name: common
+  repository: https://charts.computersthatwork.ca/
+  version: 1.0.1
+description: a basic universal chart from my common library
 keywords:
 - common
+maintainers:
+- email: tyler.hoadley@computersthatwork.ca
+  name: tylerhoadley
+sources:
+- https://github.com/tylerhoadley/charts
 kubeVersion: '>=1.16.0-0'
 name: common
 type: library
-version: 1.0.0
+version: 1.0.1

@@ -1,3 +1,6 @@
+global:
+  nameOverride: test
+  fullnameOverride: test
 image:
   # -- image repository
   repository: debian

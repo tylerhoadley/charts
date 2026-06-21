@@ -38,7 +38,7 @@
   env:
     {{- get (fromYaml (include "common.controller.env_vars" $)) "env" | toYaml | nindent 4 -}}
   {{- end }}
-  {{- if or .Values.envFrom .Values.secret .Values.sealedSecrets }}
+  {{- if or .Values.envFrom .Values.secret  }}
   envFrom:
     {{- with .Values.envFrom }}
       {{- toYaml . | nindent 4 }}
@@ -46,11 +46,6 @@
     {{- if .Values.secret }}
     - secretRef:
         name: {{ include "common.names.fullname" . }}
-    {{- end }}
-    {{- if .Values.sealedSecrets }}
-    - secretRef:
-        name: {{ include "common.names.fullname" . }}-sealed-secrets
-        optional: false
     {{- end }}
 
   {{- end }}

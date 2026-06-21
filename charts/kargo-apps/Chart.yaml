@@ -2,6 +2,8 @@ apiVersion: v2
 appVersion: v1.10.4
 description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
   in a single release.
+home: https://charts.computersthatwork.ca
+icon: https://docs.kargo.io/img/kargo.png
 keywords:
 - kargo
 - gitops
@@ -18,5 +20,7 @@ maintainers:
 - email: tyler.hoadley@computersthatwork.ca
   name: tyler hoadley
 name: kargo-apps
+sources:
+- https://github.com/akuity/kargo
 type: application
-version: 0.0.1
+version: 0.0.2

@@ -12,7 +12,7 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: ClusterPromotionTask
 metadata:
-  name: {{ $computedName }}
+  name: {{ $taskName }}
   {{- with (merge ($taskData.labels | default dict) (include "common.labels" $taskRoot | fromYaml)) }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}

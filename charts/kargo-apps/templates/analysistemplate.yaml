@@ -13,8 +13,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: {{ $templateName }}
-  namespace: {{ $parentProjectName }} {{/* Dynamically lands in the correct target namespace */}}
+  name: {{ $projectName }}
   labels: {{- include "common.labels" $ | nindent 4 }}
   {{- with $templateData.annotations }}
   annotations: {{- toYaml . | nindent 4 }}

@@ -11,7 +11,7 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: ProjectConfig
 metadata:
-  name: {{ $parentProjectName }}
+  name: {{ $projectName }}
   labels: {{- include "common.labels" $ | nindent 4 }}
   {{- with $projectData.config.annotations }}
   annotations: {{- toYaml . | nindent 4 }}

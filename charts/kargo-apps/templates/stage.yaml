@@ -14,7 +14,6 @@ apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
 metadata:
   name: {{ $stageName }}
-  namespace: {{ $parentProjectName }}
   labels: {{- include "common.labels" $ | nindent 4 }}
   {{- with $stageData.annotations }}
   annotations: {{- toYaml . | nindent 4 }}

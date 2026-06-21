@@ -12,7 +12,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ClusterAnalysisTemplate
 metadata:
-  name: {{ $computedName }}
+  name: {{ $templateName }}
   {{- with (merge ($templateData.labels | default dict) (include "common.labels" $templateRoot | fromYaml)) }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}

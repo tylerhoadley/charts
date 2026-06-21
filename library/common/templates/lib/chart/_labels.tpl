@@ -18,5 +18,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/* Selector labels shared across objects */}}
 {{- define "common.labels.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "common.names.fullname" . }}
+app.kubernetes.io/part-of: {{ include "common.names.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}

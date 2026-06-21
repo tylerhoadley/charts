@@ -1,4 +1,4 @@
-version: 1.0.1
+version: 1.0.2
 name: universal
 description: a basic universal chart from my common library
 keywords:
@@ -8,15 +8,15 @@ sources:
 - https://github.com/tylerhoadley/charts/tree/master/charts/universal
 annotations:
   artifacthub.io/changes: |
-    - "1.0.1"
+    - "1.0.2"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/prerelease: "false"
 apiVersion: v2
-appVersion: 1.0.1
+appVersion: 1.0.2
 dependencies:
 - name: common
   repository: https://github.com/tylerhoadley/charts/
-  version: 1.0.1
+  version: 1.0.2
 maintainers:
 - email: tyler.hoadley@computersthatwork.ca
   name: tylerhoadley

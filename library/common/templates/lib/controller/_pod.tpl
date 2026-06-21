@@ -90,6 +90,7 @@ hostAliases:
 nodeSelector:
     {{- toYaml . | nindent 2 }}
   {{- end }}
+  
   {{- with .Values.affinity }}
 affinity:
     {{- toYaml . | nindent 2 }}
@@ -98,6 +99,11 @@ affinity:
 topologySpreadConstraints:
     {{- toYaml . | nindent 2 }}
   {{- end }}
+{{- if .Values.topologySpreadConstraintsAutoLabelSelector.enabled }}
+  labelSelector:
+    matchLabels:
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
+{{- end }}
   {{- with .Values.tolerations }}
 tolerations:
     {{- toYaml . | nindent 2 }}

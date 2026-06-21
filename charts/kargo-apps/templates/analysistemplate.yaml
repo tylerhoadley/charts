@@ -1,0 +1,36 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }} {{/* We only care if the block is enabled! Create flag is ignored here */}}
+{{- range $templateName, $templateData := $projectData.analysisTemplate }}
+{{- if $templateData.enabled }}
+---
+{{- $projectRoot := deepCopy $ }}
+{{- $_ := set $projectRoot "Values" (merge (dict "nameOverride" $projectData.nameOverride "fullnameOverride" $projectData.fullnameOverride) $.Values) }}
+{{- $parentProjectName := include "common.names.fullname" $projectRoot }}
+{{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
+  {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
+{{- end }}
+
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: {{ $templateName }}
+  namespace: {{ $parentProjectName }} {{/* Dynamically lands in the correct target namespace */}}
+  labels: {{- include "common.labels" $ | nindent 4 }}
+  {{- with $templateData.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $templateData.metrics }}
+  metrics:
+    {{- toYaml $templateData.metrics | nindent 4 }}
+  {{- else }}
+  metrics: []
+  {{- end }}
+  {{- if $templateData.args }}
+  args:
+    {{- toYaml $templateData.args | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{ end }}

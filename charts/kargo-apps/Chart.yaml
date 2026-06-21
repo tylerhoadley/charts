@@ -1,0 +1,22 @@
+apiVersion: v2
+appVersion: v1.10.4
+description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
+  in a single release.
+keywords:
+- kargo
+- gitops
+- analysistemplate
+- clusteranalysistemplate
+- clusterconfig
+- clusterpromotiontask
+- projectconfig
+- project
+- promotiontask
+- stage
+- warehouse
+maintainers:
+- email: tyler.hoadley@computersthatwork.ca
+  name: tyler hoadley
+name: kargo-apps
+type: application
+version: 0.0.1

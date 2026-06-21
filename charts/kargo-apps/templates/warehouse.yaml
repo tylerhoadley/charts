@@ -1,0 +1,41 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- range $warehouseName, $warehouseData := $projectData.warehouse }}
+{{- if $warehouseData.enabled }}
+---
+{{- $projectRoot := deepCopy $ }}
+{{- $_ := set $projectRoot "Values" (merge (dict "nameOverride" $projectData.nameOverride "fullnameOverride" $projectData.fullnameOverride) $.Values) }}
+{{- $parentProjectName := include "common.names.fullname" $projectRoot }}
+{{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
+  {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
+{{- end }}
+
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: {{ $warehouseName }}
+  namespace: {{ $parentProjectName }}
+  labels: {{- include "common.labels" $ | nindent 4 }}
+  {{- with $warehouseData.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  interval: {{ $warehouseData.interval | default "5m0s" | quote }}
+  {{- if $warehouseData.subscriptions }}
+  subscriptions:
+    {{- toYaml $warehouseData.subscriptions | nindent 4 }}
+  {{- end }}
+  {{- if $warehouseData.freightCreationCriteria }}
+  freightCreationCriteria:
+    {{- toYaml $warehouseData.freightCreationCriteria | nindent 4 }}
+  {{- end }}
+  {{- if $warehouseData.freightCreationPolicy }}
+  freightCreationPolicy: {{ $warehouseData.freightCreationPolicy | quote }}
+  {{- end }}
+  {{- if $warehouseData.shard }}
+  shard: {{ $warehouseData.shard | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{ end }}

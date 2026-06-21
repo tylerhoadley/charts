@@ -1,0 +1,158 @@
+# ==============================================================================
+# GLOBAL CONFIGURATION BOUNDARIES
+# ==============================================================================
+global:
+  nameOverride: ""
+  fullnameOverride: ""
+  labels: {}
+  annotations: {}
+
+nameOverride: ""
+fullnameOverride: ""
+
+# ==============================================================================
+# CLUSTER-SCOPED RESOURCES (FOUNDATIONAL REVENUE CONTROL)
+# ==============================================================================
+clusterAnalysisTemplate:
+  astoverride:
+    enabled: true
+    metrics:
+      - name: cluster-ingress-error-rate
+        interval: 1m
+        successCondition: result[0] < 0.05
+        provider:
+          prometheus:
+            address: http://prometheus.monitoring.svc.cluster.local:9090
+            query: |
+              sum(rate(nginx_ingress_controller_requests{status=~"5.*"}[2m])) 
+              / 
+              sum(rate(nginx_ingress_controller_requests[2m]))
+    args:
+      - name: cluster-region
+        value: "us-east-1"
+
+clusterPromotionTask:
+  cptoverride:
+    enabled: true
+    steps:
+      - uses: git-clone
+        config:
+          repoURL: "https://github.com/your-org/gitops-infra.git"
+      - uses: git-clear
+    vars:
+      - name: targetBranch
+        value: "main"
+
+clusterConfig: 
+  ccoverride:
+    enabled: true
+    promotionPolicies: []
+
+# ==============================================================================
+# PROJECT BOUNDARY & NAMESPACE DELIVERY ECOSYSTEMS
+# ==============================================================================
+project:
+  poverride: 
+    enabled: true
+    create: true 
+    spec: {}
+
+    config:
+      enabled: true
+      promotionPolicies: []
+
+    # --------------------------------------------------------------------------
+    # 1. VERIFICATION TEMPLATES (Argo Rollouts Metric Providers)
+    # --------------------------------------------------------------------------
+    analysisTemplate:
+      atoverride: # <-- Key name matches object target precisely
+        enabled: true
+        metrics:
+          - name: api-http-success-rate
+            interval: 30s
+            count: 4
+            successCondition: result[0] >= 0.99
+            provider:
+              prometheus:
+                address: http://prometheus-operated.monitoring:9090
+                query: |
+                  sum(rate(http_requests_total{status!~"5.*", service="${{ args.service-name }}"}[1m]))
+                  /
+                  sum(rate(http_requests_total{service="${{ args.service-name }}"}[1m]))
+        args:
+          - name: service-name
+            value: "web-gateway-svc"
+
+    # --------------------------------------------------------------------------
+    # 2. SOURCE SUBSCRIPTIONS (Implicit Local Credential Scoping)
+    # --------------------------------------------------------------------------
+    warehouse:
+      woverride: # <-- Defined structural tracking source name
+        enabled: true
+        subscriptions:
+          - helm:
+              repoURL: "https://charts.bitnami.com/bitnami"
+              name: "redis"
+              semverConstraint: "^18.0.0"
+          - image:
+              repoURL: "us-central1-docker.pkg.dev/my-gcp-project-id/application-registry/web-service"
+              semverConstraint: "^2.1.0"
+          - image:
+              repoURL: "ghcr.io/your-organization-name/core-api"
+              allowTags: "^main-[a-f0-9]{7}$"
+          - image:
+              repoURL: "registry.hub.docker.com/library/nginx"
+              semverConstraint: "~1.25.0"
+        freightCreationPolicy: "Automatic"
+
+    # --------------------------------------------------------------------------
+    # 3. PIPELINE STAGES (Deployment target boundaries and guardrails)
+    # --------------------------------------------------------------------------
+    stage:
+      soverride:
+        enabled: true
+        requestedFreight:
+          - origin:
+              kind: Warehouse
+              name: warehouseItemName # FIXED: Links flawlessly to your warehouse item key
+            sources:
+              direct: true
+        verification:
+          analysisTemplates:
+            - name: analysisTemplateItemName # FIXED: Resolves precisely to the correct template object name
+          args:
+            - name: service-name
+              value: "frontend-ux-backend-service"
+          periodicEvaluations: []
+        promotionTemplate:
+          steps:
+            - uses: git-clone
+              config:
+                repoURL: "https://github.com/your-org/gitops-infra.git"
+            - uses: kustomize-set-image
+              config:
+                image: "ghcr.io/your-org/core-api"
+                path: "environments/stages/dev"
+            - uses: git-commit
+              config:
+                message: "chore(kargo): auto-promoted image to development environment"
+
+    # --------------------------------------------------------------------------
+    # 4. RUNTIME AUTOMATION TASKS (Reusable operational building blocks)
+    # --------------------------------------------------------------------------
+    promotionTask:
+      ptoverride:
+        enabled: true
+        steps:
+          - uses: git-clone
+            config:
+              repoURL: "https://github.com/your-org/gitops-infra.git"
+          - uses: argocd-update
+            config:
+              apps:
+                - name: "${{ vars.targetArgoAppName }}" # FIXED: Conforms to safe enterprise expressions format
+        vars:
+          - name: targetArgoAppName
+            value: "frontend-ux-gateway"
+          - name: repositoryEnvironmentPath
+            value: "overlays/production"

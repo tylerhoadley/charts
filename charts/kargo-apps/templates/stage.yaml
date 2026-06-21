@@ -1,0 +1,52 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- range $stageName, $stageData := $projectData.stage }}
+{{- if $stageData.enabled }}
+---
+{{- $projectRoot := deepCopy $ }}
+{{- $_ := set $projectRoot "Values" (merge (dict "nameOverride" $projectData.nameOverride "fullnameOverride" $projectData.fullnameOverride) $.Values) }}
+{{- $parentProjectName := include "common.names.fullname" $projectRoot }}
+{{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
+  {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
+{{- end }}
+
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: {{ $stageName }}
+  namespace: {{ $parentProjectName }}
+  labels: {{- include "common.labels" $ | nindent 4 }}
+  {{- with $stageData.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $stageData.requestedFreight }}
+  requestedFreight:
+    {{- toYaml $stageData.requestedFreight | nindent 4 }}
+  {{- end }}
+  {{- if $stageData.freightRequest }}
+  freightRequest:
+    {{- toYaml $stageData.freightRequest | nindent 4 }}
+  {{- end }}
+  {{- if $stageData.promotionTemplate }}
+  promotionTemplate:
+    {{- toYaml $stageData.promotionTemplate | nindent 4 }}
+  {{- end }}
+  {{- if $stageData.verification }}
+  verification:
+    {{- if $stageData.verification.analysisTemplates }}
+    analysisTemplates:
+      {{- range $stageData.verification.analysisTemplates }}
+      - name: {{ .name }}
+      {{- end }}
+    {{- end }}
+    {{- if $stageData.verification.args }}
+    args:
+      {{- toYaml $stageData.verification.args | nindent 6 }}
+    {{- end }}
+    periodicEvaluations: {{ $stageData.verification.periodicEvaluations | default (list) }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{ end }}

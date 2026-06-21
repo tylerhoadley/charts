@@ -1,0 +1,32 @@
+{{- range $taskName, $taskData := .Values.clusterPromotionTask }}
+{{- if $taskData.enabled }}
+---
+{{- $taskRoot := deepCopy $ }}
+{{- $_ := set $taskRoot "Values" (merge (dict "nameOverride" $taskData.nameOverride "fullnameOverride" $taskData.fullnameOverride) $.Values) }}
+{{- $_ := set $taskRoot "ObjectValues" (dict "clusterPromotionTask" $taskData) }}
+{{- $computedName := include "common.names.fullname" $taskRoot }}
+{{- if not (or $taskData.nameOverride $taskData.fullnameOverride) }}
+  {{- $computedName = printf "%v-%v" $computedName $taskName }}
+{{- end }}
+
+apiVersion: kargo.akuity.io/v1alpha1
+kind: ClusterPromotionTask
+metadata:
+  name: {{ $computedName }}
+  {{- with (merge ($taskData.labels | default dict) (include "common.labels" $taskRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($taskData.annotations | default dict) (include "common.annotations" $taskRoot | fromYaml)) }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $taskData.vars }}
+  vars:
+    {{- toYaml $taskData.vars | nindent 4 }}
+  {{- end }}
+  {{- if $taskData.steps }}
+  steps:
+    {{- toYaml $taskData.steps | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{ end }}

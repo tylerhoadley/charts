@@ -1,0 +1,34 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- range $taskName, $taskData := $projectData.promotionTask }}
+{{- if $taskData.enabled }}
+---
+{{- $projectRoot := deepCopy $ }}
+{{- $_ := set $projectRoot "Values" (merge (dict "nameOverride" $projectData.nameOverride "fullnameOverride" $projectData.fullnameOverride) $.Values) }}
+{{- $parentProjectName := include "common.names.fullname" $projectRoot }}
+{{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
+  {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
+{{- end }}
+
+apiVersion: kargo.akuity.io/v1alpha1
+kind: PromotionTask
+metadata:
+  name: {{ $taskName }}
+  namespace: {{ $parentProjectName }}
+  labels: {{- include "common.labels" $ | nindent 4 }}
+  {{- with $taskData.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $taskData.vars }}
+  vars:
+    {{- toYaml $taskData.vars | nindent 4 }}
+  {{- end }}
+  {{- if $taskData.steps }}
+  steps:
+    {{- toYaml $taskData.steps | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{ end }}

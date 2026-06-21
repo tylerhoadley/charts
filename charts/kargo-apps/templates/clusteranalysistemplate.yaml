@@ -1,0 +1,32 @@
+{{- range $templateName, $templateData := .Values.clusterAnalysisTemplate }}
+{{- if $templateData.enabled }}
+---
+{{- $templateRoot := deepCopy $ }}
+{{- $_ := set $templateRoot "Values" (merge (dict "nameOverride" $templateData.nameOverride "fullnameOverride" $templateData.fullnameOverride) $.Values) }}
+{{- $_ := set $templateRoot "ObjectValues" (dict "clusterAnalysisTemplate" $templateData) }}
+{{- $computedName := include "common.names.fullname" $templateRoot }}
+{{- if not (or $templateData.nameOverride $templateData.fullnameOverride) }}
+  {{- $computedName = printf "%v-%v" $computedName $templateName }}
+{{- end }}
+
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterAnalysisTemplate
+metadata:
+  name: {{ $computedName }}
+  {{- with (merge ($templateData.labels | default dict) (include "common.labels" $templateRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($templateData.annotations | default dict) (include "common.annotations" $templateRoot | fromYaml)) }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $templateData.metrics }}
+  metrics:
+    {{- toYaml $templateData.metrics | nindent 4 }}
+  {{- end }}
+  {{- if $templateData.args }}
+  args:
+    {{- toYaml $templateData.args | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{ end }}

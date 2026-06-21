@@ -1,0 +1,27 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- if ne $projectData.create false }}
+---
+{{- $projectRoot := deepCopy $ }}
+{{- $_ := set $projectRoot "Values" (merge (dict "nameOverride" $projectData.nameOverride "fullnameOverride" $projectData.fullnameOverride) $.Values) }}
+{{- $parentProjectName := include "common.names.fullname" $projectRoot }}
+{{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
+  {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
+{{- end }}
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Project
+metadata:
+  name: {{ $parentProjectName }}
+  labels: {{- include "common.labels" $ | nindent 4 }}
+  {{- with $projectData.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $projectData.spec }}
+    {{- toYaml $projectData.spec | nindent 2 }}
+  {{- else }}
+  {}
+  {{- end }}
+{{ end }}
+{{- end }}
+{{ end }}

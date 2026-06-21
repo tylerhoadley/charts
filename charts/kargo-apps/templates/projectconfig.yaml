@@ -20,8 +20,6 @@ spec:
   {{- if $projectData.config.promotionPolicies }}
   promotionPolicies:
     {{- toYaml $projectData.config.promotionPolicies | nindent 4 }}
-  {{- else }}
-  {}
   {{- end }}
 {{ end }}
 {{- end }}

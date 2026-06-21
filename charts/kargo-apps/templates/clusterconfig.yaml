@@ -13,8 +13,6 @@ spec:
   {{- if $configData.promotionPolicies }}
   promotionPolicies:
     {{- toYaml $configData.promotionPolicies | nindent 4 }}
-  {{- else }}
-  {}
   {{- end }}
 {{- end }}
 {{ end }}

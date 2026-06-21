@@ -19,8 +19,6 @@ metadata:
 spec:
   {{- if $projectData.spec }}
     {{- toYaml $projectData.spec | nindent 2 }}
-  {{- else }}
-  {}
   {{- end }}
 {{ end }}
 {{- end }}

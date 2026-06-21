@@ -1,0 +1,8 @@
+apiVersion: v2
+description: Functional library for common use charts
+keywords:
+- common
+kubeVersion: '>=1.16.0-0'
+name: common
+type: library
+version: 1.0.0

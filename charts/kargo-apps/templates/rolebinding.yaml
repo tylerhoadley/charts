@@ -1,0 +1,30 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- $resolvedProjectName := include "common.names.kargoProjectName" (list $ $projectName) }}
+{{- range $rbacName, $rbacData := $projectData.rbac }}
+{{- if $rbacData.create }}
+---
+{{- $templateRoot := deepCopy $ }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-kargo-%s" $resolvedProjectName $rbacName }}
+  namespace: {{ $resolvedProjectName }}
+  {{- with (merge ($rbacData.labels | default dict) (include "common.labels" $templateRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($rbacData.annotations | default dict) (include "common.annotations" $templateRoot | fromYaml)) }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-kargo-%s" $resolvedProjectName $rbacName }}
+subjects:
+- kind: ServiceAccount
+  name: {{ printf "%s-kargo-%s" $resolvedProjectName $rbacName }}
+  namespace: {{ $resolvedProjectName }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

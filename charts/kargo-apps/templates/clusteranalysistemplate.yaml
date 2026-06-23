@@ -8,8 +8,9 @@
 {{- if not (or $templateData.nameOverride $templateData.fullnameOverride) }}
   {{- $computedName = printf "%v-%v" $computedName $templateName }}
 {{- end }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
 
-apiVersion: argoproj.io/v1alpha1
+apiVersion: {{ $api_version }}
 kind: ClusterAnalysisTemplate
 metadata:
   name: {{ $templateName }}

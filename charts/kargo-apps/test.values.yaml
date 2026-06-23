@@ -1,0 +1,119 @@
+
+project:
+  haproxy-project:
+    enabled: true
+    create: true
+    annotations:
+      argocd.argoproj.io/sync-wave: "-5"
+    config:
+      enabled: true
+      promotionPolicies:
+        - autoPromotionEnabled: true
+          stageSelector:
+            name: haproxy-sync
+      annotations:
+        argocd.argoproj.io/sync-wave: "-4"
+    rbac:
+      admin:
+        create: false
+        labels: {}
+        annotations:
+          argocd.argoproj.io/sync-wave: "-4"
+        claims: 
+          email:
+            - lead-admin@example.com
+          groups:
+            - payment-leads
+      viewer:
+        create: false
+        labels: {}
+        annotations:
+          argocd.argoproj.io/sync-wave: "-4"
+        claims:
+          groups:
+            - viewers-group
+    analysisTemplate:
+      haproxy: # <-- Key name matches object target precisely
+        enabled: false
+        annotations:
+          argocd.argoproj.io/sync-wave: "-3"
+        args:
+          - name: url
+          - name: expected-status
+            value: "200"
+        metrics:
+          - name: http-metric
+            interval: 10s
+            count: 3
+            successCondition: "result.status == {{ args.expected-status }}"
+            provider:
+              web:
+                url: "{{ args.url }}"
+                method: "GET"
+                timeoutSeconds: 90
+                # Content-Type header is required if you are sending JSON
+                headers:
+                  - key: Content-Type
+                    value: application/json
+    warehouse:
+      haproxy: # <-- Defined structural tracking source name
+        enabled: true
+        annotations:
+          argocd.argoproj.io/sync-wave: "-2"
+          kargo.akuity.io/color: "#1cac52"
+        freightCreationPolicy: Automatic
+        interval: 15m0s
+        subscriptions:
+          - git:
+              repoURL: https://gitlab.computersthatwork.ca/iac/k8s/ctw-config.git
+              discoveryLimit: 5
+              branch: tnt-kube # Or whatever branch your base templates live on
+              commitSelectionStrategy: NewestFromBranch
+              includePaths:
+                - config/internal/haproxy
+      haproxy-chart: # <-- Defined structural tracking source name
+        enabled: true
+        annotations:
+          argocd.argoproj.io/sync-wave: "-2"
+          kargo.akuity.io/color: "#1cac52"
+        freightCreationPolicy: Automatic
+        interval: 15m0s
+        subscriptions:
+        - chart:
+            repoURL: https://haproxytech.github.io/helm-charts
+            discoveryLimit: 10
+            name: haproxy
+            semverConstraint: ^1.28.0
+    stage:
+      haproxy-sync:
+        enabled: true
+        annotations:
+          argocd.argoproj.io/sync-wave: "-1"
+          kargo.akuity.io/color: "#1cac52"
+        requestedFreight:
+        - origin:
+            kind: Warehouse
+            name: haproxy
+          sources:
+            direct: true 
+
+        promotionTemplate:
+          spec:
+            steps:
+            # Step 1: Call the reusable cluster task to update and wait for Argo CD
+            - task:
+                kind: ClusterPromotionTask
+                name: argocd-sync-and-wait
+              vars:
+              - name: name
+                value: haproxy
+        verification:
+          analysisTemplates:
+            - name: configurable-http-check
+          args:
+            - name: url
+              value: "https://www.computersthatwork.ca/"
+            - name: method
+              value: "GET"
+            - name: expected-status
+              value: "200"

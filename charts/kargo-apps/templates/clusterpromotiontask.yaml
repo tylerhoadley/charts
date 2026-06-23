@@ -8,8 +8,9 @@
 {{- if not (or $taskData.nameOverride $taskData.fullnameOverride) }}
   {{- $computedName = printf "%v-%v" $computedName $taskName }}
 {{- end }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
 
-apiVersion: kargo.akuity.io/v1alpha1
+apiVersion: {{ $api_version }}
 kind: ClusterPromotionTask
 metadata:
   name: {{ $taskName }}

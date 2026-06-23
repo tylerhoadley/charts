@@ -29,6 +29,11 @@
   {{- print "gateway.networking.k8s.io/v1" -}}
 {{- end -}}
 
+{{/* Return the appropriate apiVersion for Ingress objects */}}
+{{- define "common.capabilities.kargo.apiVersion" -}}
+  {{- print "kargo.akuity.io/v1alpha1" -}}
+{{- end -}}
+
 {{/* Check Ingress stability */}}
 {{- define "common.capabilities.httproute.isStable" -}}
   {{- if eq (include "common.capabilities.httproute.apiVersion" .) "gateway.networking.k8s.io/v1" -}}

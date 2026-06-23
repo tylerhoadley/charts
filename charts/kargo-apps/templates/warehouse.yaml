@@ -9,8 +9,9 @@
 {{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
   {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
 {{- end }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
 
-apiVersion: kargo.akuity.io/v1alpha1
+apiVersion: {{ $api_version }}
 kind: Warehouse
 metadata:
   name: {{ $warehouseName }}

@@ -57,9 +57,33 @@ project:
     create: true 
     spec: {}
 
+    # --------------------------------------------------------------------------
+    # KARGO Project CONFIGURATION 
+    # --------------------------------------------------------------------------
     config:
       enabled: true
       promotionPolicies: []
+
+    # --------------------------------------------------------------------------
+    # KARGO RBAC CONFIGURATION (Native Kubernetes Authorization Mapping)
+    # --------------------------------------------------------------------------
+    rbac:
+      admin:
+        create: true
+        labels: {}
+        annotations: {}
+        claims: 
+          email:
+            - lead-admin@example.com
+          groups:
+            - payment-leads
+      viewer:
+        create: true
+        labels: {}
+        annotations: {}
+        claims:
+          groups:
+            - viewers-group
 
     # --------------------------------------------------------------------------
     # 1. VERIFICATION TEMPLATES (Argo Rollouts Metric Providers)

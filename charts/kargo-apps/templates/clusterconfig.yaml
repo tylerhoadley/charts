@@ -1,18 +1,28 @@
 {{- range $clusterConfigName, $configData := .Values.clusterConfig }}
 {{- if $configData.enabled }}
 ---
-apiVersion: kargo.akuity.io/v1alpha1
+{{- $templateRoot := deepCopy $ }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
+
+apiVersion: {{ $api_version }}
 kind: ClusterConfig
 metadata:
   name: {{ $clusterConfigName }}
-  labels: {{- include "common.labels" $ | nindent 4 }}
-  {{- with $configData.annotations }}
+  {{- with (merge ($configData.labels | default dict) (include "common.labels" $templateRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($configData.annotations | default dict) (include "common.annotations" $templateRoot | fromYaml)) }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if $configData.promotionPolicies }}
-  promotionPolicies:
-    {{- toYaml $configData.promotionPolicies | nindent 4 }}
+  {{- if $configData.gitClient }}
+  gitClient:
+    {{- toYaml $configData.gitClient | nindent 4 }}
+  {{- end }}
+  {{- if $configData.config.webhookReceivers }}
+  webhookReceivers:
+    {{- toYaml $configData.config.webhookReceivers | nindent 4 }}
   {{- end }}
 {{- end }}
 {{ end }}
+

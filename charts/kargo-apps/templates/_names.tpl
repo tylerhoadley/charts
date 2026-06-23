@@ -7,11 +7,6 @@
   {{- default .Chart.Name (default .Values.nameOverride $globalNameOverride) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
 {{- define "common.names.fullname" -}}
   {{- $name := include "common.names.name" . -}}
   {{- $globalFullNameOverride := "" -}}
@@ -44,15 +39,28 @@ If release name contains chart name it will be used as a full name.
   {{- end -}}
 {{- end -}}
 
-{{/* Return the properly cased version of the controller type */}}
-{{- define "common.names.controllerType" -}}
-  {{- if eq .Values.controller.type "deployment" -}}
-    {{- print "Deployment" -}}
-  {{- else if eq .Values.controller.type "daemonset" -}}
-    {{- print "DaemonSet" -}}
-  {{- else if eq .Values.controller.type "statefulset"  -}}
-    {{- print "StatefulSet" -}}
-  {{- else -}}
-    {{- fail (printf "Not a valid controller.type (%s)" .Values.controller.type) -}}
+{{/*
+Determine the deterministic Project Name boundary.
+- If the current key is literal "kargo-project", it uses .Release.Name as the baseline.
+- It then appends any local suffix/prefix specified under the project configuration map.
+- Respects explicit global or local overrides if defined.
+*/}}
+{{- define "common.names.kargoProjectName" -}}
+  {{- $root := index . 0 -}}
+  {{- $currentKey := index . 1 -}}
+  
+  {{- $computedName := $currentKey -}}
+  {{- if eq $currentKey "kargo-project" -}}
+    {{- $projectData := index $root.Values.project $currentKey -}}
+    {{- $prefix := default "" $projectData.namePrefix -}}
+    {{- $suffix := default "" $projectData.nameSuffix -}}
+    {{- $computedName = printf "%s%s%s" $prefix $root.Release.Name $suffix -}}
   {{- end -}}
+  
+  {{- $globalOverride := "" -}}
+  {{- if hasKey $root.Values "global" -}}
+    {{- $globalOverride = (default $globalOverride $root.Values.global.kargoProjectNameOverride) -}}
+  {{- end -}}
+  
+  {{- default $computedName (default $root.Values.kargoProjectNameOverride $globalOverride) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

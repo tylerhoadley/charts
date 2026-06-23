@@ -81,18 +81,76 @@ clusterConfig:
 # -- Root core collection mapping for all project namespaces and nested pipeline ecosystems
 project:
   # -- Dynamic dictionary key capturing the unique identifier of the target Kargo Project
-  pname: 
+  kargo-project:
     # -- Enable or disable the generation of this project scope and all nested resources within it
     enabled: false
     # -- Explicitly instructs Helm to deploy Project + ProjectConfig (set to false if project is already defined)
     create: true
 
+    # -- Optional prefix string prepended directly onto the `.Release.Name` baseline.
+    namePrefix: ""
+    # -- Optional suffix string appended directly onto the `.Release.Name` baseline.
+    nameSuffix: ""
     # -- Resource-specific metadata annotations array for the main Project manifest
     annotations: {}
     # -- Resource-specific metadata labels array for the main Project manifest
     labels: {}
     # -- Complete raw configuration block option mapping for custom project parameters if required by the spec
     spec: {}
+
+    # --------------------------------------------------------------------------
+    # KARGO RBAC CONFIGURATION (Native Kubernetes Authorization Mapping)
+    # --------------------------------------------------------------------------
+    # -- Dict mapping for project-specific access control. Map keys (e.g., admin, viewer) 
+    # are prefixed with 'kargo-' to dynamically bind to Kargo's native roles.
+    rbac:
+      # -- Generates localized RBAC mapping to grant administrative permissions over this project namespace
+      admin:
+        # -- Controls generation of the matching ServiceAccount and RoleBinding resources for project admins
+        create: false
+        # -- Explicit metadata labels applied over the admin ServiceAccount and RoleBinding
+        labels: {}
+        # -- Explicit metadata annotations applied over the admin ServiceAccount and RoleBinding
+        annotations: {}
+        # -- REQUIRED BY KARGO SPEC: Structural OIDC claim data block. The chart processes this raw mapping 
+        # using 'toJson' to securely emit a valid single-line string into the Kargo claims annotation.
+        claims: 
+          email: []
+            # - lead-admin@example.com
+          groups: []
+            # - payment-leads
+
+      # -- Generates localized RBAC mapping granting restricted pipeline execution rights.
+      promoter:
+        # -- Controls dynamic execution/generation of the ServiceAccount, Role, and RoleBinding trio
+        create: false
+        # -- Explicit metadata labels applied across all three matching RBAC resources
+        labels: {}
+        # -- Explicit metadata annotations applied across all three matching RBAC resources
+        annotations: {}
+        # -- REQUIRED BY KARGO SPEC: Structural OIDC identity claim mappings. 
+        # Decoded by Kargo API server and associated securely down into the ServiceAccount layer via stringified JSON.
+        claims:
+          email: []
+            # - lead-promoter@example.com
+          groups: []
+            # - release-managers
+            # - automation-runners
+      # -- Generates localized RBAC mapping to grant standard read-only view access over this project namespace
+      viewer:
+        # -- Controls generation of the matching ServiceAccount and RoleBinding resources for project viewers
+        create: false
+        # -- Explicit metadata labels applied over the viewer ServiceAccount and RoleBinding
+        labels: {}
+        # -- Explicit metadata annotations applied over the viewer ServiceAccount and RoleBinding
+        annotations: {}
+        # -- REQUIRED BY KARGO SPEC: Structural OIDC claim data block. The chart processes this raw mapping 
+        # using 'toJson' to securely emit a valid single-line string into the Kargo claims annotation.
+        claims:
+          email: []
+            # - lead-viewer@example.com
+          groups: []
+            # - viewers-group
 
     # -- Singleton configuration layer bound directly to the parent project identity.
     # @default -- shares the exact computed name identifier as the parent project manifest
@@ -135,10 +193,11 @@ project:
         args:
           - name: service-name
             value: "web-gateway-svc"
-        # -- Resource-specific metadata annotations array for this individual resource
-        annotations: {}
         # -- Resource-specific metadata labels array for this individual resource
         labels: {}
+        # -- Resource-specific metadata annotations array for this individual resource
+        annotations: {}
+
 
     # --------------------------------------------------------------------------
     # 2. SOURCE SUBSCRIPTIONS (Implicit Local Credential Scoping)
@@ -149,7 +208,7 @@ project:
       wname:
         # -- Enable or disable the generation of this individual warehouse resource
         enabled: false
-        
+
         # REQUIRED BY SPEC: List of source tracking endpoints (images, git repositories, helm charts) to monitor for updates
         # Kargo tracks credentials seamlessly using Namespace Secrets containing the label: kargo.akuity.io/cred-type: <helm|image>
         subscriptions:
@@ -179,6 +238,10 @@ project:
               imageSelectionStrategy: SemVer
               semverConstraint: "~1.25.0"
 
+        # -- Resource-specific metadata labels array for this individual resource
+        labels: {}
+        # -- Resource-specific metadata annotations array for this individual resource
+        annotations: {}
         # -- Strategy mapping deciding how New Freight is instantiated inside the engine ('Automatic' or 'Manual')
         freightCreationPolicy: "Automatic"
         # -- Polling interval syntax instructing the controller how often to verify source subscription states
@@ -213,10 +276,10 @@ project:
         #     kind: Warehouse
         #     name: warehouseItemName
 
-        # -- Resource-specific metadata annotations array for this individual stage
-        annotations: {}
-        # -- Resource-specific metadata labels array for this individual stage
+        # -- Resource-specific metadata labels array for this individual resource
         labels: {}
+        # -- Resource-specific metadata annotations array for this individual resource
+        annotations: {}
         # -- Shard label parameter configuring target execution groups for isolated controller clustering
         shard: ""
         # -- Parameter block specifying automated validation parameters, test automation tasks, or health evaluation templates
@@ -269,10 +332,10 @@ project:
         #       apps:
         #         - name: "frontend-ux-service"
 
-        # -- Resource-specific metadata annotations array for this task
-        annotations: {}
-        # -- Resource-specific metadata labels array for this task
+        # -- Resource-specific metadata labels array for this individual resource
         labels: {}
+        # -- Resource-specific metadata annotations array for this individual resource
+        annotations: {}
         # -- Collection of execution parameters variable states declared locally inside the task ecosystem
         vars: []
           # - name: defaultGitBranch

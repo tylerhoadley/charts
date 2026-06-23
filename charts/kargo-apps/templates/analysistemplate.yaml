@@ -9,13 +9,16 @@
 {{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
   {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
 {{- end }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
 
-apiVersion: argoproj.io/v1alpha1
+apiVersion: {{ $api_version }}
 kind: AnalysisTemplate
 metadata:
   name: {{ $projectName }}
-  labels: {{- include "common.labels" $ | nindent 4 }}
-  {{- with $templateData.annotations }}
+  {{- with (merge ($templateData.labels | default dict) (include "common.labels" $projectRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($templateData.annotations | default dict) (include "common.annotations" $projectRoot | fromYaml)) }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

@@ -1,0 +1,74 @@
+{{- range $projectName, $projectData := .Values.project }}
+{{- if $projectData.enabled }}
+{{- $resolvedProjectName := include "common.names.kargoProjectName" (list $ $projectName) }}
+{{- range $rbacName, $rbacData := $projectData.rbac }}
+{{- if $rbacData.create }}
+---
+{{- $templateRoot := deepCopy $ }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ printf "%s-kargo-%s" $resolvedProjectName $rbacName }}
+  namespace: {{ $projectName }}
+  {{- with (merge ($rbacData.labels | default dict) (include "common.labels" $templateRoot | fromYaml)) }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (merge ($rbacData.annotations | default dict) (include "common.annotations" $templateRoot | fromYaml)) }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+{{- if eq $rbacName "admin" }}
+- apiGroups:
+  - "kargo.akuity.io"
+  resources:
+  - "projects"
+  - "stages"
+  - "warehouses"
+  - "promotions"
+  - "freights"
+  - "analysisruns"
+  - "analysistemplates"
+  verbs:
+  - "*"
+{{- else if eq $rbacName "promoter" }}
+# Rules specialized for the custom pipeline promoter execution tier
+- apiGroups:
+  - "kargo.akuity.io"
+  resources:
+  - "promotions"
+  - "freights"
+  verbs:
+  - "*"
+- apiGroups:
+  - "kargo.akuity.io"
+  resources:
+  - "projects"
+  - "stages"
+  - "warehouses"
+  - "analysisruns"
+  - "analysistemplates"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+{{- else }}
+# Fallback viewer read-only rule mappings
+- apiGroups:
+  - "kargo.akuity.io"
+  resources:
+  - "projects"
+  - "stages"
+  - "warehouses"
+  - "promotions"
+  - "freights"
+  - "analysisruns"
+  - "analysistemplates"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{ end }}

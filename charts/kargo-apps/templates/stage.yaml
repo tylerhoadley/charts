@@ -9,8 +9,9 @@
 {{- if not (or $projectData.nameOverride $projectData.fullnameOverride) }}
   {{- $parentProjectName = printf "%v-%v" $parentProjectName $projectName }}
 {{- end }}
+{{- $api_version := include "common.capabilities.kargo.apiVersion" . }}
 
-apiVersion: kargo.akuity.io/v1alpha1
+apiVersion: {{ $api_version }}
 kind: Stage
 metadata:
   name: {{ $stageName }}
@@ -31,6 +32,13 @@ spec:
   promotionTemplate:
     {{- toYaml $stageData.promotionTemplate | nindent 4 }}
   {{- end }}
+  {{- if $stageData.vars }}
+  vars:
+    {{- toYaml $stageData.vars | nindent 4 }}
+  {{- end }}
+  {{- if $stageData.shard }}
+  shard: {{ $stageData.shard | quote }}
+  {{- end }}
   {{- if $stageData.verification }}
   verification:
     {{- if $stageData.verification.analysisTemplates }}
@@ -39,11 +47,15 @@ spec:
       - name: {{ .name }}
       {{- end }}
     {{- end }}
+    {{- if $stageData.verification.analysisRunMetadata }}
+    analysisRunMetadata:
+      {{- toYaml $stageData.verification.analysisRunMetadata | nindent 6 }}
+    {{- end }}
+
     {{- if $stageData.verification.args }}
     args:
       {{- toYaml $stageData.verification.args | nindent 6 }}
     {{- end }}
-    periodicEvaluations: {{ $stageData.verification.periodicEvaluations | default (list) }}
   {{- end }}
 {{- end }}
 {{- end }}

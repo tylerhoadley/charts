@@ -1,8 +1,34 @@
 apiVersion: v1
 entries:
+  applicationsets:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Add sourceHydrator field support to Application and ApplicationSet templates
+      artifacthub.io/signKey: |
+        fingerprint: 2B8F22F57260EFA67BE1C5824B11F800CD9D2252
+        url: https://argoproj.github.io/argo-helm/pgp_keys.asc
+    apiVersion: v2
+    created: "2026-06-23T01:08:49.606129246-04:00"
+    description: A Helm chart for managing additional Argo CD Applications and Projects
+    digest: cb817dc278739ede17e74d51392e6509dfcdcb608c3f7d0abbfc5dab94feb8f3
+    home: https://github.com/argoproj/argo-helm
+    icon: https://argo-cd.readthedocs.io/en/stable/assets/logo.png
+    keywords:
+    - argoproj
+    - argocd
+    - gitops
+    maintainers:
+    - name: argoproj
+      url: https://argoproj.github.io/
+    name: applicationsets
+    type: application
+    urls:
+    - https://charts.computersthatwork.ca/applicationsets-2.0.5.tgz
+    version: 2.0.5
   common:
   - apiVersion: v2
-    created: "2026-06-22T20:41:47.45123467-04:00"
+    created: "2026-06-23T01:08:49.639065605-04:00"
     description: Functional library for common use charts
     digest: 5b3a3587846c6b568a9da7e55ab5f6dbb9ed75476a68a460b93455217a072025
     keywords:
@@ -14,7 +40,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.4.tgz
     version: 1.0.4
   - apiVersion: v2
-    created: "2026-06-22T20:41:47.445659929-04:00"
+    created: "2026-06-23T01:08:49.628012108-04:00"
     description: Functional library for common use charts
     digest: a11e0268782abdef9e66f55e942f5f8b1fe1ef3222cb666c9c9f4278a4150532
     keywords:
@@ -26,7 +52,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.3.tgz
     version: 1.0.3
   - apiVersion: v2
-    created: "2026-06-22T20:41:47.442680723-04:00"
+    created: "2026-06-23T01:08:49.624924126-04:00"
     description: Functional library for common use charts
     digest: f6c65b0ba49456032ed8b3731c99cf9e0787ec727f5bf7b2e26997059cb4abdc
     keywords:
@@ -38,7 +64,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v2
-    created: "2026-06-22T20:41:47.439684676-04:00"
+    created: "2026-06-23T01:08:49.621731889-04:00"
     description: Functional library for common use charts
     digest: 586501f9932d8d3201c85555a94f9e86d26b0edb9061b76707425f81b6d1c7b3
     keywords:
@@ -50,7 +76,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2026-06-22T20:41:47.43643249-04:00"
+    created: "2026-06-23T01:08:49.609986195-04:00"
     description: Functional library for common use charts
     digest: 7b1eade47800a4a58e2394d6d9d19b4d21ee50606176be5178613b0caeff2c94
     keywords:
@@ -64,7 +90,7 @@ entries:
   kargo-apps:
   - apiVersion: v2
     appVersion: v1.10.7
-    created: "2026-06-22T20:41:47.456431248-04:00"
+    created: "2026-06-23T01:08:49.645424021-04:00"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 4c1cbe3830981dcb3056a9ff399ce2df066047029a83ef7a88f3aedd4c5035d6
@@ -94,7 +120,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-06-22T20:41:47.45504567-04:00"
+    created: "2026-06-23T01:08:49.643763615-04:00"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: c667bcefc6880ee43004ea7ac6b1da42b0e87ab874248c4c2c378afbea8939d8
@@ -124,7 +150,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-06-22T20:41:47.453821909-04:00"
+    created: "2026-06-23T01:08:49.642504227-04:00"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 06717d5c7b2570bb8175685bac1b145c07145a1f0aeecfd12094f60882d76dfa
@@ -154,7 +180,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-06-22T20:41:47.45258741-04:00"
+    created: "2026-06-23T01:08:49.640831345-04:00"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 1f7d40d3ed25b7091fd8d4f77be3b02c5afc0c0e107971c366accac008324a01
@@ -186,7 +212,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-22T20:41:47.457832641-04:00"
+    created: "2026-06-23T01:08:49.646877146-04:00"
     dependencies:
     - name: library
       repository: https://buttahtoast.github.io/helm-charts/
@@ -212,7 +238,7 @@ entries:
   universal:
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-06-22T20:41:47.478963834-04:00"
+    created: "2026-06-23T01:08:49.667363-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -233,7 +259,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.0.3
-    created: "2026-06-22T20:41:47.475689677-04:00"
+    created: "2026-06-23T01:08:49.664055822-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -254,7 +280,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.0.2
-    created: "2026-06-22T20:41:47.47193053-04:00"
+    created: "2026-06-23T01:08:49.66014339-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -275,7 +301,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2026-06-22T20:41:47.466127158-04:00"
+    created: "2026-06-23T01:08:49.653552297-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -296,7 +322,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-22T20:41:47.46128649-04:00"
+    created: "2026-06-23T01:08:49.650219333-04:00"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -315,4 +341,4 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/universal-1.0.0.tgz
     version: 1.0.0
-generated: "2026-06-22T20:41:47.432597702-04:00"
+generated: "2026-06-23T01:08:49.605445399-04:00"

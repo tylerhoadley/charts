@@ -9,7 +9,7 @@ entries:
         fingerprint: 2B8F22F57260EFA67BE1C5824B11F800CD9D2252
         url: https://argoproj.github.io/argo-helm/pgp_keys.asc
     apiVersion: v2
-    created: "2026-11-10T20:10:07.333661952Z"
+    created: "2026-11-10T21:56:16.553419964Z"
     description: A Helm chart for managing additional Argo CD Applications and Projects
     digest: cb817dc278739ede17e74d51392e6509dfcdcb608c3f7d0abbfc5dab94feb8f3
     home: https://github.com/argoproj/argo-helm
@@ -27,9 +27,30 @@ entries:
     - https://charts.computersthatwork.ca/applicationsets-2.0.5.tgz
     version: 2.0.5
   common:
+  - annotations:
+      artifacthub.io/changes: '- "1.0.6-rc.1"'
+      artifacthub.io/prerelease: "true"
+    apiVersion: v2
+    appVersion: 1.0.6-rc.1
+    created: "2026-11-10T21:56:16.57184878Z"
+    description: a basic universal chart from my common library
+    digest: 8f471aff6f2b8e306bf0a3b8764ebddf7b9eaca312fd25a131899ee49994f1fd
+    keywords:
+    - common
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: tyler.hoadley@computersthatwork.ca
+      name: tylerhoadley
+    name: common
+    sources:
+    - https://github.com/tylerhoadley/charts
+    type: library
+    urls:
+    - https://charts.computersthatwork.ca/common-1.0.6-rc.1.tgz
+    version: 1.0.6-rc.1
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-11-10T20:10:07.34330981Z"
+    created: "2026-11-10T21:56:16.568758098Z"
     description: a basic universal chart from my common library
     digest: d5d0f1c6798c7c7fd1e990ba9bded90c97d5e77df9b4cd39d0b1bc0fb45d6998
     keywords:
@@ -47,7 +68,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-11-10T20:10:07.342058996Z"
+    created: "2026-11-10T21:56:16.566757675Z"
     description: a basic universal chart from my common library
     digest: c030e4fcba406191642a2fea6d125485f9da4c311758b5b14978b39434881ce9
     keywords:
@@ -64,7 +85,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.5-rc.1.tgz
     version: 1.0.5-rc.1
   - apiVersion: v2
-    created: "2026-11-10T20:10:07.340842122Z"
+    created: "2026-11-10T21:56:16.564806724Z"
     description: Functional library for common use charts
     digest: 5b3a3587846c6b568a9da7e55ab5f6dbb9ed75476a68a460b93455217a072025
     keywords:
@@ -76,7 +97,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.4.tgz
     version: 1.0.4
   - apiVersion: v2
-    created: "2026-11-10T20:10:07.339511248Z"
+    created: "2026-11-10T21:56:16.562748975Z"
     description: Functional library for common use charts
     digest: a11e0268782abdef9e66f55e942f5f8b1fe1ef3222cb666c9c9f4278a4150532
     keywords:
@@ -88,7 +109,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.3.tgz
     version: 1.0.3
   - apiVersion: v2
-    created: "2026-11-10T20:10:07.337424611Z"
+    created: "2026-11-10T21:56:16.559335532Z"
     description: Functional library for common use charts
     digest: f6c65b0ba49456032ed8b3731c99cf9e0787ec727f5bf7b2e26997059cb4abdc
     keywords:
@@ -100,7 +121,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v2
-    created: "2026-11-10T20:10:07.336241187Z"
+    created: "2026-11-10T21:56:16.557278991Z"
     description: Functional library for common use charts
     digest: 586501f9932d8d3201c85555a94f9e86d26b0edb9061b76707425f81b6d1c7b3
     keywords:
@@ -112,7 +133,7 @@ entries:
     - https://charts.computersthatwork.ca/common-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2026-11-10T20:10:07.335011294Z"
+    created: "2026-11-10T21:56:16.555389297Z"
     description: Functional library for common use charts
     digest: 7b1eade47800a4a58e2394d6d9d19b4d21ee50606176be5178613b0caeff2c94
     keywords:
@@ -126,7 +147,7 @@ entries:
   kargo-apps:
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-11-10T20:10:07.34716273Z"
+    created: "2026-11-10T21:56:16.576703652Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 1a7eff5ef69c55f4d89c5cd01d41dcd7062ec6f83599a14dbb29c3628f3ee281
@@ -156,7 +177,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-11-10T20:10:07.346690041Z"
+    created: "2026-11-10T21:56:16.57586843Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: fe838a2642e62d7417252057fb44b924293106313db5b54bfedae84d8b0f1a80
@@ -186,7 +207,7 @@ entries:
     version: 1.0.5-rc.1
   - apiVersion: v2
     appVersion: v1.10.7
-    created: "2026-11-10T20:10:07.34618167Z"
+    created: "2026-11-10T21:56:16.575107206Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 4c1cbe3830981dcb3056a9ff399ce2df066047029a83ef7a88f3aedd4c5035d6
@@ -216,7 +237,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-11-10T20:10:07.34563463Z"
+    created: "2026-11-10T21:56:16.574254094Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: c667bcefc6880ee43004ea7ac6b1da42b0e87ab874248c4c2c378afbea8939d8
@@ -246,7 +267,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-11-10T20:10:07.345105898Z"
+    created: "2026-11-10T21:56:16.57351929Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 06717d5c7b2570bb8175685bac1b145c07145a1f0aeecfd12094f60882d76dfa
@@ -276,7 +297,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: v1.10.4
-    created: "2026-11-10T20:10:07.344555503Z"
+    created: "2026-11-10T21:56:16.572724526Z"
     description: A generic, DRY Helm chart for managing multiple Akuity Kargo resources
       in a single release.
     digest: 1f7d40d3ed25b7091fd8d4f77be3b02c5afc0c0e107971c366accac008324a01
@@ -308,7 +329,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-11-10T20:10:07.351062438Z"
+    created: "2026-11-10T21:56:16.583178636Z"
     dependencies:
     - name: library
       repository: https://buttahtoast.github.io/helm-charts/
@@ -338,7 +359,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-11-10T20:10:07.350572684Z"
+    created: "2026-11-10T21:56:16.582430749Z"
     dependencies:
     - name: common
       repository: http://127.0.0.1:8089
@@ -368,7 +389,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-11-10T20:10:07.349180628Z"
+    created: "2026-11-10T21:56:16.580270408Z"
     dependencies:
     - name: common
       repository: http://127.0.0.1:8089
@@ -393,13 +414,40 @@ entries:
     version: 1.0.5-rc.1
   universal:
   - annotations:
+      artifacthub.io/changes: '- "1.0.6-rc.1"'
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/prerelease: "true"
+      computersthatwork.ca/auto-release: "true"
+    apiVersion: v2
+    appVersion: 1.0.6-rc.1
+    created: "2026-11-10T21:56:16.602497456Z"
+    dependencies:
+    - name: common
+      repository: http://127.0.0.1:8089
+      version: 1.0.6-rc.1
+    description: a basic universal chart from my common library
+    digest: e894cafaad0d29c0fe5e6cc8f3f8884874f846aa5d48aff55a2e4177a83828d0
+    keywords:
+    - common
+    - universal
+    maintainers:
+    - email: tyler.hoadley@computersthatwork.ca
+      name: tylerhoadley
+    name: universal
+    sources:
+    - https://github.com/tylerhoadley/charts/tree/master/charts/universal
+    type: application
+    urls:
+    - https://charts.computersthatwork.ca/universal-1.0.6-rc.1.tgz
+    version: 1.0.6-rc.1
+  - annotations:
       artifacthub.io/changes: |
         - "1.0.4"
       artifacthub.io/containsSecurityUpdates: "false"
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-11-10T20:10:07.361526499Z"
+    created: "2026-11-10T21:56:16.600452143Z"
     dependencies:
     - name: common
       repository: http://127.0.0.1:8089
@@ -426,7 +474,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-11-10T20:10:07.360184307Z"
+    created: "2026-11-10T21:56:16.598361753Z"
     dependencies:
     - name: common
       repository: http://127.0.0.1:8089
@@ -448,7 +496,7 @@ entries:
     version: 1.0.5-rc.1
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2026-11-10T20:10:07.358181442Z"
+    created: "2026-11-10T21:56:16.595684487Z"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -469,7 +517,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.0.3
-    created: "2026-11-10T20:10:07.356931339Z"
+    created: "2026-11-10T21:56:16.593208794Z"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -490,7 +538,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.0.2
-    created: "2026-11-10T20:10:07.355653955Z"
+    created: "2026-11-10T21:56:16.591221321Z"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -511,7 +559,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2026-11-10T20:10:07.353753266Z"
+    created: "2026-11-10T21:56:16.588677836Z"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -532,7 +580,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-11-10T20:10:07.352288075Z"
+    created: "2026-11-10T21:56:16.585231383Z"
     dependencies:
     - name: common
       repository: https://charts.computersthatwork.ca/
@@ -551,4 +599,4 @@ entries:
     urls:
     - https://charts.computersthatwork.ca/universal-1.0.0.tgz
     version: 1.0.0
-generated: "2026-11-10T20:10:07.333404987Z"
+generated: "2026-11-10T21:56:16.553110806Z"

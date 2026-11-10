@@ -95,13 +95,13 @@ jobs:
         run: |
           mkdir -p ../dist
 
-          # Package common first into staging
+          # 1. Package library/common (it has no dependencies now, so this will succeed cleanly)
           helm package library/common -d ../dist
 
-          # Index staging repo
+          # 2. Generate local repository index for staging
           helm repo index ../dist
 
-          # Serve locally in background for consumer charts
+          # 3. Serve the staged library chart locally in the background
           python3 -m http.server 8089 --directory ../dist &
           SERVER_PID=$!
           echo "server_pid=${SERVER_PID}" >> $GITHUB_OUTPUT
@@ -110,25 +110,36 @@ jobs:
       - name: Package Downstream Charts using Local Repository
         working-directory: src
         run: |
+          # Add local repository and update index cache
           helm repo add local-staging http://127.0.0.1:8089
-          ls -la charts/*
+          helm repo update local-staging
 
-          for d in charts/universal; do
+          for d in charts/*/; do
             if [ -f "${d}Chart.yaml" ]; then
               CHART_NAME=$(basename "$d")
-              echo "Packaging ${CHART_NAME}..."
+              echo "Packaging ${CHART_NAME} from ${d}..."
 
+              # If chart has dependencies, resolve against local-staging
               if yq '.dependencies' "${d}Chart.yaml" | grep -q "name:"; then
+                # Point common dependency to the local runner server
                 yq -i '(.dependencies[] | select(.name == "common")).repository = "http://127.0.0.1:8089"' "${d}Chart.yaml"
-                helm dependency update "$d"
-                # Restore destination URL before final packaging
-                yq -i '(.dependencies[] | select(.name == "common")).repository = "https://charts.computersthatwork.ca/"' "${d}Chart.yaml"
-              fi
 
-              helm package "$d" -d ../dist
+                # Pull the newly packaged common chart into ${d}/charts/
+                helm dependency update "$d"
+
+                # Package the chart while dependencies and Chart.lock are aligned
+                helm package "$d" -d ../dist
+
+                # Restore the public production URL in Chart.yaml so Git receives the correct URL
+                yq -i '(.dependencies[] | select(.name == "common")).repository = "https://charts.computersthatwork.ca/"' "${d}Chart.yaml"
+              else
+                # Chart has no dependencies (e.g. standalone/raw chart)
+                helm package "$d" -d ../dist
+              fi
             fi
           done
 
+          # Stop local background server
           kill ${{ steps.local-server.outputs.server_pid }} || true
 
       - name: Publish Artifacts to gh-pages Branch

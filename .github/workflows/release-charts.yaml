@@ -30,7 +30,7 @@ jobs:
           ref: main
           path: src
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Checkout Destination (gh-pages)
         uses: actions/checkout@v4
@@ -38,6 +38,7 @@ jobs:
           ref: gh-pages
           path: dest
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Determine Target Version
         id: vars

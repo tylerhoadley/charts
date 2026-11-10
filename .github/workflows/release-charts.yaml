@@ -1,0 +1,159 @@
+name: Release Charts
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      target_version:
+        description: 'SemVer version to release (e.g. 1.0.83)'
+        required: true
+      is_prerelease:
+        description: 'Is this a pre-release?'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: helm-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Source (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: src
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout Destination (gh-pages)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: dest
+          fetch-depth: 0
+
+      - name: Determine Target Version
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+            VERSION=$(echo "$TAG" | sed -E 's/^(common-)?v?//')
+            IS_PRERELEASE="${{ github.event.release.prerelease }}"
+          else
+            VERSION="${{ github.event.inputs.target_version }}"
+            IS_PRERELEASE="${{ github.event.inputs.is_prerelease }}"
+          fi
+
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
+          echo "Target version: ${VERSION} (Pre-release: ${IS_PRERELEASE})"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.3
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update Chart Versions and Base Dependencies
+        working-directory: src
+        run: |
+          TARGET_VER="${{ steps.vars.outputs.version }}"
+
+          # 1. Update library/common
+          echo "Setting library/common to ${TARGET_VER}"
+          yq -i ".version = \"${TARGET_VER}\"" library/common/Chart.yaml
+
+          # 2. Update all application charts (lockstep version & common dependency)
+          for d in charts/*/; do
+            if [ -f "${d}Chart.yaml" ]; then
+              CHART_NAME=$(basename "$d")
+              echo "Synchronizing ${CHART_NAME} to version ${TARGET_VER}..."
+              yq -i ".version = \"${TARGET_VER}\"" "${d}Chart.yaml"
+
+              # If chart depends on common, update its dependency version constraint
+              if yq '.dependencies[] | select(.name == "common")' "${d}Chart.yaml" | grep -q "common"; then
+                yq -i "(.dependencies[] | select(.name == \"common\")).version = \"${TARGET_VER}\"" "${d}Chart.yaml"
+              fi
+            fi
+          done
+
+      - name: Build Local Staging Repository
+        id: local-server
+        working-directory: src
+        run: |
+          mkdir -p ../dist
+
+          # Package common first into staging
+          helm package library/common -d ../dist
+
+          # Index staging repo
+          helm repo index ../dist
+
+          # Serve locally in background for consumer charts
+          python3 -m http.server 8089 --directory ../dist &
+          SERVER_PID=$!
+          echo "server_pid=${SERVER_PID}" >> $GITHUB_OUTPUT
+          sleep 2
+
+      - name: Package Downstream Charts using Local Repository
+        working-directory: src
+        run: |
+          helm repo add local-staging http://127.0.0.1:8089
+
+          for d in charts/*/; do
+            if [ -f "${d}Chart.yaml" ]; then
+              CHART_NAME=$(basename "$d")
+              echo "Packaging ${CHART_NAME}..."
+
+              if yq '.dependencies' "${d}Chart.yaml" | grep -q "name:"; then
+                yq -i '(.dependencies[] | select(.name == "common")).repository = "http://127.0.0.1:8089"' "${d}Chart.yaml"
+                helm dependency update "$d"
+                # Restore destination URL before final packaging
+                yq -i '(.dependencies[] | select(.name == "common")).repository = "https://charts.computersthatwork.ca/"' "${d}Chart.yaml"
+              fi
+
+              helm package "$d" -d ../dist
+            fi
+          done
+
+          kill ${{ steps.local-server.outputs.server_pid }} || true
+
+      - name: Publish Artifacts to gh-pages Branch
+        working-directory: dest
+        run: |
+          cp ../dist/*.tgz .
+
+          # Re-index all charts against computersthatwork.ca URL
+          helm repo index . --url https://charts.computersthatwork.ca/
+
+          git add *.tgz index.yaml
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish release ${{ steps.vars.outputs.version }} [skip ci]"
+            git push origin gh-pages
+          else
+            echo "No artifact changes to commit on gh-pages."
+          fi
+
+      - name: Sync Updated Chart.yaml to Main Branch (Official Releases Only)
+        if: steps.vars.outputs.is_prerelease == 'false'
+        working-directory: src
+        run: |
+          git add library/common/Chart.yaml charts/*/Chart.yaml charts/*/Chart.lock
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(release): lockstep bump charts to ${{ steps.vars.outputs.version }} [skip ci]"
+            git push origin main
+          else
+            echo "No metadata changes to commit on main."
+          fi

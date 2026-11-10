@@ -1,0 +1,45 @@
+name: Lint and Test Charts
+
+on:
+  pull_request:
+    paths:
+      - 'library/**'
+      - 'charts/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.3
+
+      - name: Stage Local Base Chart
+        run: |
+          mkdir -p /tmp/dist
+          helm package library/common -d /tmp/dist
+          helm repo index /tmp/dist
+          python3 -m http.server 8089 --directory /tmp/dist &
+          sleep 2
+
+      - name: Lint Application Charts
+        run: |
+          for d in charts/*/; do
+            if [ -f "${d}Chart.yaml" ]; then
+              echo "Linting $d..."
+              if yq '.dependencies' "${d}Chart.yaml" | grep -q "name:"; then
+                yq -i '(.dependencies[] | select(.name == "common")).repository = "http://127.0.0.1:8089"' "${d}Chart.yaml"
+                helm dependency update "$d"
+              fi
+              helm lint "$d"
+            fi
+          done

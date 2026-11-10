@@ -111,8 +111,9 @@ jobs:
         working-directory: src
         run: |
           helm repo add local-staging http://127.0.0.1:8089
+          ls -la charts/*
 
-          for d in charts/*/; do
+          for d in charts/universal; do
             if [ -f "${d}Chart.yaml" ]; then
               CHART_NAME=$(basename "$d")
               echo "Packaging ${CHART_NAME}..."

@@ -23,3 +23,5 @@ sources:
   - https://github.com/akuity/kargo
 type: application
 version: 1.0.5
+annotations:
+  computersthatwork.ca/auto-release: "false"

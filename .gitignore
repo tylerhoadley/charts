@@ -1,0 +1,5 @@
+# Helm locks and downloaded subchart archives
+charts/*/charts/
+charts/*/Chart.lock
+library/*/charts/
+library/*/Chart.lock

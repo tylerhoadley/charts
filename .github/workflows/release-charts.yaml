@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       target_version:
-        description: 'SemVer version to release (e.g. 1.0.83)'
+        description: 'SemVer version to release (e.g. 1.0.5)'
         required: true
       is_prerelease:
         description: 'Is this a pre-release?'
@@ -67,23 +67,38 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Update Chart Versions and Base Dependencies
+      - name: Update Chart Versions and Metadata
         working-directory: src
         run: |
           TARGET_VER="${{ steps.vars.outputs.version }}"
+          IS_PRE="${{ steps.vars.outputs.is_prerelease }}"
 
           # 1. Update library/common
-          echo "Setting library/common to ${TARGET_VER}"
+          echo "Updating library/common to ${TARGET_VER}"
           yq -i ".version = \"${TARGET_VER}\"" library/common/Chart.yaml
+          yq -i ".appVersion = \"${TARGET_VER}\"" library/common/Chart.yaml
+          yq -i ".annotations.\"artifacthub.io/prerelease\" = \"${IS_PRE}\"" library/common/Chart.yaml
+          yq -i ".annotations.\"artifacthub.io/changes\" = \"- \\\"${TARGET_VER}\\\"\"" library/common/Chart.yaml
 
-          # 2. Update all application charts (lockstep version & common dependency)
+          # 2. Update downstream charts (unless opted out)
           for d in charts/*/; do
             if [ -f "${d}Chart.yaml" ]; then
               CHART_NAME=$(basename "$d")
+
+              # Skip charts where auto-release is set to false
+              AUTO_RELEASE=$(yq '.annotations."computersthatwork.ca/auto-release"' "${d}Chart.yaml")
+              if [ "$AUTO_RELEASE" = "false" ]; then
+                echo "Skipping ${CHART_NAME} (computersthatwork.ca/auto-release is false)"
+                continue
+              fi
+
               echo "Synchronizing ${CHART_NAME} to version ${TARGET_VER}..."
               yq -i ".version = \"${TARGET_VER}\"" "${d}Chart.yaml"
+              yq -i ".appVersion = \"${TARGET_VER}\"" "${d}Chart.yaml"
+              yq -i ".annotations.\"artifacthub.io/prerelease\" = \"${IS_PRE}\"" "${d}Chart.yaml"
+              yq -i ".annotations.\"artifacthub.io/changes\" = \"- \\\"${TARGET_VER}\\\"\"" "${d}Chart.yaml"
 
-              # If chart depends on common, update its dependency version constraint
+              # Sync version constraint on common dependency
               if yq '.dependencies[] | select(.name == "common")' "${d}Chart.yaml" | grep -q "common"; then
                 yq -i "(.dependencies[] | select(.name == \"common\")).version = \"${TARGET_VER}\"" "${d}Chart.yaml"
               fi
@@ -96,59 +111,60 @@ jobs:
         run: |
           mkdir -p ../dist
 
-          # 1. Package library/common (it has no dependencies now, so this will succeed cleanly)
+          # Package library/common
           helm package library/common -d ../dist
-
-          # 2. Generate local repository index for staging
           helm repo index ../dist
 
-          # 3. Serve the staged library chart locally in the background
+          # Serve locally in background for dependency resolution
           python3 -m http.server 8089 --directory ../dist &
           SERVER_PID=$!
           echo "server_pid=${SERVER_PID}" >> $GITHUB_OUTPUT
           sleep 2
 
-      - name: Package Downstream Charts using Local Repository
+      - name: Package Downstream Charts
         working-directory: src
         run: |
-          # Add local repository and update index cache
           helm repo add local-staging http://127.0.0.1:8089
           helm repo update local-staging
 
           for d in charts/*/; do
             if [ -f "${d}Chart.yaml" ]; then
               CHART_NAME=$(basename "$d")
-              echo "Packaging ${CHART_NAME} from ${d}..."
 
-              # If chart has dependencies, resolve against local-staging
+              AUTO_RELEASE=$(yq '.annotations."computersthatwork.ca/auto-release"' "${d}Chart.yaml")
+              if [ "$AUTO_RELEASE" = "false" ]; then
+                echo "Skipping packaging for ${CHART_NAME}"
+                continue
+              fi
+
+              echo "Packaging ${CHART_NAME}..."
+
               if yq '.dependencies' "${d}Chart.yaml" | grep -q "name:"; then
-                # Point common dependency to the local runner server
+                # Swap local file:// path with local-staging HTTP endpoint for packaging
                 yq -i '(.dependencies[] | select(.name == "common")).repository = "http://127.0.0.1:8089"' "${d}Chart.yaml"
 
-                # Pull the newly packaged common chart into ${d}/charts/
                 helm dependency update "$d"
 
-                # Package the chart while dependencies and Chart.lock are aligned
+                # Package the chart while dependencies are resolved
                 helm package "$d" -d ../dist
 
-                # Restore the public production URL in Chart.yaml so Git receives the correct URL
+                # Revert to production HTTPS or local file:// for main branch
                 yq -i '(.dependencies[] | select(.name == "common")).repository = "https://charts.computersthatwork.ca/"' "${d}Chart.yaml"
               else
-                # Chart has no dependencies (e.g. standalone/raw chart)
                 helm package "$d" -d ../dist
               fi
+
+              # Clean up internal charts folder so nothing lingering is committed
+              rm -rf "${d}charts" "${d}Chart.lock"
             fi
           done
 
-          # Stop local background server
           kill ${{ steps.local-server.outputs.server_pid }} || true
 
       - name: Publish Artifacts to gh-pages Branch
         working-directory: dest
         run: |
           cp ../dist/*.tgz .
-
-          # Re-index all charts against computersthatwork.ca URL
           helm repo index . --url https://charts.computersthatwork.ca/
 
           git add *.tgz index.yaml
@@ -163,7 +179,19 @@ jobs:
         if: steps.vars.outputs.is_prerelease == 'false'
         working-directory: src
         run: |
-          git add library/common/Chart.yaml charts/*/Chart.yaml charts/*/Chart.lock
+          # Keep the local development path file:// in main if desired
+          for d in charts/*/; do
+            if [ -f "${d}Chart.yaml" ]; then
+              AUTO_RELEASE=$(yq '.annotations."computersthatwork.ca/auto-release"' "${d}Chart.yaml")
+              if [ "$AUTO_RELEASE" != "false" ]; then
+                yq -i '(.dependencies[] | select(.name == "common")).repository = "file://../../library/common"' "${d}Chart.yaml"
+              fi
+            fi
+          done
+
+          # Stage ONLY Chart.yaml files (explicitly excluding Chart.lock and charts/ directories)
+          git add library/common/Chart.yaml charts/*/Chart.yaml
+
           if ! git diff --cached --quiet; then
             git commit -m "chore(release): lockstep bump charts to ${{ steps.vars.outputs.version }} [skip ci]"
             git push origin main

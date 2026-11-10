@@ -9,17 +9,11 @@ name: raw
 sources:
   - https://github.com/tylerhoadley/charts/tree/master/charts/raw
 version: 1.0.5
+
 annotations:
-  artifacthub.io/changes: |
-    - "1.0.0"
-  artifacthub.io/containsSecurityUpdates: "false"
-  artifacthub.io/prerelease: "false"
+  computersthatwork.ca/auto-release: "false"
 apiVersion: v2
-appVersion: 1.0.0
-dependencies:
-  - name: common
-    repository: https://charts.computersthatwork.ca/
-    version: 1.0.5
+appVersion: 2.0.1
 maintainers:
   - email: tyler.hoadley@computersthatwork.ca
     name: tylerhoadley

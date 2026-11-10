@@ -2,13 +2,13 @@ apiVersion: v2
 appVersion: 1.0.4
 description: a basic universal chart from my common library
 keywords:
-- common
+  - common
 maintainers:
-- email: tyler.hoadley@computersthatwork.ca
-  name: tylerhoadley
+  - email: tyler.hoadley@computersthatwork.ca
+    name: tylerhoadley
 sources:
-- https://github.com/tylerhoadley/charts
+  - https://github.com/tylerhoadley/charts
 kubeVersion: '>=1.16.0-0'
 name: common
 type: library
-version: 1.0.4
+version: 1.0.5

@@ -2,14 +2,13 @@ description: Render raw kubernetes manifests managed by a helm release
 home: https://github.com/tylerhoadley/charts/tree/master/charts/raw
 icon: https://github.com/kubernetes/kubernetes/blob/master/logo/name_blue.svg
 keywords:
-- raw
-- templates
-- resources
+  - raw
+  - templates
+  - resources
 name: raw
 sources:
-- https://github.com/tylerhoadley/charts/tree/master/charts/raw
-version: 2.0.0
-
+  - https://github.com/tylerhoadley/charts/tree/master/charts/raw
+version: 1.0.5
 annotations:
   artifacthub.io/changes: |
     - "1.0.0"
@@ -18,10 +17,10 @@ annotations:
 apiVersion: v2
 appVersion: 1.0.0
 dependencies:
-- name: common
-  repository: https://github.com/tylerhoadley/charts/
-  version: 1.0.0
+  - name: common
+    repository: https://charts.computersthatwork.ca/
+    version: 1.0.5
 maintainers:
-- email: tyler.hoadley@computersthatwork.ca
-  name: tylerhoadley
+  - email: tyler.hoadley@computersthatwork.ca
+    name: tylerhoadley
 type: application

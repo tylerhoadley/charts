@@ -2,8 +2,8 @@ apiVersion: v2
 name: universal
 description: a basic universal chart from my common library
 type: application
-version: 1.0.5
-appVersion: 1.0.5
+version: 1.0.6
+appVersion: 1.0.6
 keywords:
   - common
   - universal
@@ -15,10 +15,10 @@ maintainers:
 dependencies:
   - name: common
     repository: file://../../library/common
-    version: 1.0.5
+    version: 1.0.6
 annotations:
   computersthatwork.ca/auto-release: "true"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/prerelease: "false"
-  artifacthub.io/changes: |
-    - "1.0.5"
+  artifacthub.io/changes: |-
+    - "1.0.6"
